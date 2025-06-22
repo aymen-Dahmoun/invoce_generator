@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import UtilsBar from "../Comps/UtilsBar";
@@ -24,6 +25,8 @@ export default function Storage() {
   const [modalVisible, setModalVisible] = useState(false);
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
+  const [unitPrice, setUnitPrice] = useState(0);
+
 
   useEffect(() => {
     fetchStoredProducts();
@@ -35,9 +38,12 @@ export default function Storage() {
   };
 
   const saveProduct = async () => {
-    if (!productName.trim() || !description.trim()) return;
+    if (!productName.trim() || !unitPrice.trim()) {
+      Alert.alert('Entrée invalide', 'assurez-vous de remplir le nom du produit et le prix unitaire') 
+      return
+    };
 
-    const newProduct = { name: productName, description };
+    const newProduct = { name: productName, description, unitPrice };
     const updated = [...products, newProduct];
 
     setProducts(updated);
@@ -45,6 +51,7 @@ export default function Storage() {
 
     setProductName("");
     setDescription("");
+    setUnitPrice("");
     setModalVisible(false);
   };
 
@@ -54,11 +61,33 @@ export default function Storage() {
     setProducts(updated);
     await setData(STORAGE_KEY, updated);
   };
+  const handleDeleteAll = async () => {
+    Alert.alert(
+      "Confirmation",
+      "Êtes-vous sûr de vouloir supprimer tous les produits ?",
+      [
+        {
+          text: "Annuler",
+          style: "cancel",
+        },
+        {
+          text: "Supprimer",
+          style: "destructive",
+          onPress: async () => {
+            await setData(STORAGE_KEY, []);
+            setProducts([]);
+          },
+        },
+      ]
+    );
+  };
+
 
   const renderItem = ({ item, index }) => (
     <View style={styles.item}>
       <View style={{ flex: 1 }}>
         <Text style={styles.itemTitle}>{item.name}</Text>
+        <Text style={styles.itemTitle}>{item.unitPrice ? Number(item.unitPrice).toFixed(2) : 0.0.toFixed(2)} DZD</Text>
         <Text style={styles.itemDescription}>{item.description}</Text>
       </View>
       <TouchableOpacity onPress={() => deleteProduct(index)}>
@@ -68,7 +97,7 @@ export default function Storage() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff0f0" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff0f0", }}>
     <MainLayout>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
@@ -80,11 +109,12 @@ export default function Storage() {
             scrollEnabled={false}
           />
         </View>
-        <UtilsBar
-          onAdd={() => setModalVisible(true)}
-          onChange={fetchStoredProducts}
-        />
       </ScrollView>
+      <UtilsBar
+        onAdd={() => setModalVisible(true)}
+        onChange={fetchStoredProducts}
+        onDelete={handleDeleteAll}
+      />
 
       <Modal
         animationType="slide"
@@ -114,6 +144,13 @@ export default function Storage() {
               onChangeText={setDescription}
               multiline
             />
+            <TextInput
+              style={styles.input}
+              placeholder="Prix Unitaire"
+              placeholderTextColor="#aa6c6c"
+              value={unitPrice}
+              onChangeText={setUnitPrice}
+            />
 
             <TouchableOpacity style={styles.addButton} onPress={saveProduct}>
               <Text style={styles.addButtonText}>Ajouter</Text>
@@ -139,7 +176,7 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 20,
-    backgroundColor: "#fff0f0",
+    backgroundColor: "#fff",
     flexGrow: 1,
   },
   header: {

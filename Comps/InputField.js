@@ -1,12 +1,12 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { Text, TextInput } from "react-native";
 
-export default function InputField({ name, label }) {
+export default function InputField({ name, label, type }) {
   const { control } = useFormContext();
 
   return (
     <>
-      <Text>{label}</Text>
+      <Text style={{fontWeight:'bold', fontSize:16, color:"#8b0000"}}>{label}</Text>
       <Controller
         control={control}
         name={name}
@@ -25,6 +25,7 @@ export default function InputField({ name, label }) {
             onChangeText={onChange}
             value={value}
             placeholder={name}
+            keyboardType= {type}
             
           />
         )}

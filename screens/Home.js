@@ -14,6 +14,7 @@ import InputField from '../Comps/InputField';
 import ProductCard from '../Comps/ProductCard';
 import { getData } from '../LocalCache/storageUtils';
 import MainLayout from '../Comps/MainLayout';
+import { handlePrintInvoice } from '../utils/htmlInvoice';
 
 const STORAGE_KEY = 'products';
 
@@ -25,6 +26,7 @@ export default function Home() {
   const [price, setPrice] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [commonProducts, setCommonProducts] = useState([]);
+  const [soldeAnt, setSoldeAnt] = useState(0)
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -37,6 +39,7 @@ export default function Home() {
   const onSubmit = (data) => {
     const fullData = { ...data, products };
     console.log(fullData);
+    handlePrintInvoice(fullData);
   };
 
   const addProduct = () => {
@@ -61,7 +64,7 @@ export default function Home() {
   const handleSuggestionSelect = (item) => {
     setProductInput(item.name);
     if (item.quantity) setQuantity(item.quantity);
-    if (item.price) setPrice(item.price);
+    if (item.unitPrice) setPrice(item.unitPrice);
     setShowSuggestions(false);
   };
 
@@ -92,8 +95,8 @@ export default function Home() {
                   <TouchableOpacity key={index} onPress={() => handleSuggestionSelect(item)}>
                     <Text style={styles.suggestionItem}>
                       {item.name}
-                      {item.quantity && item.price
-                        ? ` (Qté: ${item.quantity}, Prix: ${item.price})`
+                      {item.unitPrice && item.description
+                        ? ` (Description: ${item.description}, Prix: ${item.unitPrice})`
                         : ''}
                     </Text>
                   </TouchableOpacity>
@@ -113,16 +116,18 @@ export default function Home() {
               style={styles.input}
               value={price}
               onChangeText={setPrice}
-              placeholder="Prix"
+              placeholder="Prix unitaire"
               keyboardType="numeric"
               placeholderTextColor="#aa6c6c"
             />
+            <InputField name="SOLDE ANT" type='numeric' />
+            
 
             <TouchableOpacity style={styles.addButton} onPress={addProduct}>
               <Text style={styles.addButtonText}>Ajouter le produit</Text>
             </TouchableOpacity>
 
-            <Text style={styles.label}>Produits ajoutés:</Text>
+            {products.length > 0 && <Text style={styles.label}>Produits ajoutés:</Text>}
             <FlatList
               data={products}
               keyExtractor={(item) => item.id}
