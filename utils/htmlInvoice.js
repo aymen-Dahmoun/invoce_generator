@@ -216,8 +216,6 @@ function generateInvoiceHTML({
                 overflow-x: auto;
             }
         }
-
-
   </style>
 </head>
 <body>
@@ -266,7 +264,7 @@ function generateInvoiceHTML({
       </div>
       <div class="total-row">
         <div class="total-label">SOLDE AU DATE : ${invoiceDate}</div>
-        <div class="total-value">${soldeDate.toLocaleString("fr-FR", { minimumFractionDigits: 2 })}</div>
+        <div class="total-value">${soldeGlobal.toLocaleString("fr-FR", { minimumFractionDigits: 2 })}</div>
       </div>
     </div>
     <div class="grand-total">
@@ -280,12 +278,13 @@ function generateInvoiceHTML({
 </html>`;
 }
 
-export async function handlePrintInvoice(sampleData) {
+export async function handlePrintInvoice(data) {
+  console.log("data: ", data["VRS JOUR"])
   const now = new Date();
   const invoiceDate = now.toLocaleString("fr-FR");
   const invoiceNumber = 1;
 
-  const parsedProducts = sampleData.products.map(p => ({
+  const parsedProducts = data.products.map(p => ({
     id: p.id,
     name: p.name,
     quantity: Number(p.quantity),
@@ -293,20 +292,18 @@ export async function handlePrintInvoice(sampleData) {
   }));
 
   const totalBon = parsedProducts.reduce((sum, p) => sum + p.quantity * p.unitPrice, 0);
-  const soldeAnt = Number(sampleData.soldeant);
-  const vrsJour = soldeAnt + totalBon;
-  const soldeDate = vrsJour;
-  const soldeGlobal = vrsJour;
+  const soldeAnt = data["SOLDE ANT"] ? Number(data['SOLDE ANT']) : 0;
+  const vrsJour = data["VRS JOUR"] ? Number(data["VRS JOUR"]) : 0;
+  const soldeGlobal = vrsJour + soldeAnt + totalBon;
 
   const html = generateInvoiceHTML({
     invoiceNumber,
-    clientName: sampleData.client,
+    clientName: data.client,
     invoiceDate,
     products: parsedProducts,
     soldeAnt,
     totalBon,
     vrsJour,
-    soldeDate,
     soldeGlobal
   });
 

@@ -38,7 +38,6 @@ export default function Home() {
 
   const onSubmit = (data) => {
     const fullData = { ...data, products };
-    console.log(fullData);
     handlePrintInvoice(fullData);
   };
 
@@ -120,12 +119,14 @@ export default function Home() {
               keyboardType="numeric"
               placeholderTextColor="#aa6c6c"
             />
-            <InputField name="SOLDE ANT" type='numeric' />
-            
-
             <TouchableOpacity style={styles.addButton} onPress={addProduct}>
               <Text style={styles.addButtonText}>Ajouter le produit</Text>
             </TouchableOpacity>
+            
+            
+            <InputField name="SOLDE ANT" type='numeric' />
+            <InputField name="VRS JOUR" type='numeric' />
+            
 
             {products.length > 0 && <Text style={styles.label}>Produits ajoutés:</Text>}
             <FlatList
