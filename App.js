@@ -3,6 +3,10 @@ import { Button, View } from 'react-native';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import Home from './screens/Home';
+import Storage from './screens/Storage';
+import MainRouter from './MainRouter';
+import NavBar from './Comps/NavBar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
   const createAndSharePDF = async () => {
@@ -431,8 +435,10 @@ export default function App() {
   };
 
   return (
-    <View style={{ marginTop: 50 }}>
-      <Home />
+    <SafeAreaProvider>
+    <View style={{flex: 1}}>
+      <MainRouter />
     </View>
+    </SafeAreaProvider>
   );
 }

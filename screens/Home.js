@@ -1,42 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   TextInput,
-  Button,
   FlatList,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import { useForm, FormProvider } from 'react-hook-form';
 import InputField from '../Comps/InputField';
 import ProductCard from '../Comps/ProductCard';
+import { getData } from '../LocalCache/storageUtils';
+import MainLayout from '../Comps/MainLayout';
 
-// Static product list with defaults
-const COMMON_PRODUCTS = [
-  { name: 'Ciment', quantity: '10', price: '800' },
-  { name: 'Sable', quantity: '20', price: '400' },
-  { name: 'Gravier', quantity: '15', price: '600' },
-  { name: 'Fer à béton', quantity: '30', price: '1200' },
-  { name: 'Peinture', quantity: '5', price: '1500' },
-  { name: 'Brique', quantity: '50', price: '300' },
-  { name: 'Plaque de plâtre', quantity: '8', price: '950' },
-  { name: 'Parpaing', quantity: '40', price: '350' },
-  { name: 'Colle carrelage', quantity: '6', price: '700' },
-  { name: 'Bois', quantity: '12', price: '1100' },
-  { name: 'Tuyaux PVC', quantity: '25', price: '500' }
-];
+const STORAGE_KEY = 'products';
 
-export default function MyForm() {
+export default function Home() {
   const methods = useForm();
   const [products, setProducts] = useState([]);
   const [productInput, setProductInput] = useState('');
   const [quantity, setQuantity] = useState('');
   const [price, setPrice] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [commonProducts, setCommonProducts] = useState([]);
 
-  const onSubmit = (d) => {
-    const fullData = { ...d, products };
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      const stored = await getData(STORAGE_KEY);
+      if (stored) setCommonProducts(stored);
+    };
+    fetchSuggestions();
+  }, []);
+
+  const onSubmit = (data) => {
+    const fullData = { ...data, products };
     console.log(fullData);
   };
 
@@ -45,7 +44,7 @@ export default function MyForm() {
 
     setProducts(prev => [
       ...prev,
-      { id: Date.now().toString(), name: productInput, quantity, price }
+      { id: Date.now().toString(), name: productInput, quantity, price },
     ]);
 
     setProductInput('');
@@ -61,96 +60,146 @@ export default function MyForm() {
 
   const handleSuggestionSelect = (item) => {
     setProductInput(item.name);
-    setQuantity(item.quantity);
-    setPrice(item.price);
+    if (item.quantity) setQuantity(item.quantity);
+    if (item.price) setPrice(item.price);
     setShowSuggestions(false);
   };
 
-  const filteredSuggestions = COMMON_PRODUCTS.filter(item =>
+  const filteredSuggestions = commonProducts.filter(item =>
     item.name.toLowerCase().includes(productInput.toLowerCase())
   );
 
   return (
     <FormProvider {...methods}>
-      <View style={styles.container}>
-        <InputField name="name" label="Bon de livraison:" />
-        <InputField name="client" label="Client:" />
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff0f0' }}>
+        <MainLayout>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.container}>
+            <InputField name="client" label="Client:" />
 
-        <Text style={styles.label}>Ajouter un produit:</Text>
+            <Text style={styles.label}>Ajouter un produit:</Text>
 
-        <TextInput
-          style={styles.input}
-          value={productInput}
-          onChangeText={handleProductInputChange}
-          placeholder="Nom du produit"
-        />
-        {showSuggestions && (
-          <View style={styles.suggestions}>
-            {filteredSuggestions.map((item) => (
-              <TouchableOpacity key={item.name} onPress={() => handleSuggestionSelect(item)}>
-                <Text style={styles.suggestionItem}>
-                  {item.name} (Qté: {item.quantity}, Prix: {item.price})
-                </Text>
-              </TouchableOpacity>
-            ))}
+            <TextInput
+              style={styles.input}
+              value={productInput}
+              onChangeText={handleProductInputChange}
+              placeholder="Nom du produit"
+              placeholderTextColor="#aa6c6c"
+            />
+            {showSuggestions && filteredSuggestions.length > 0 && (
+              <View style={styles.suggestions}>
+                {filteredSuggestions.map((item, index) => (
+                  <TouchableOpacity key={index} onPress={() => handleSuggestionSelect(item)}>
+                    <Text style={styles.suggestionItem}>
+                      {item.name}
+                      {item.quantity && item.price
+                        ? ` (Qté: ${item.quantity}, Prix: ${item.price})`
+                        : ''}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+
+            <TextInput
+              style={styles.input}
+              value={quantity}
+              onChangeText={setQuantity}
+              placeholder="Quantité"
+              keyboardType="numeric"
+              placeholderTextColor="#aa6c6c"
+            />
+            <TextInput
+              style={styles.input}
+              value={price}
+              onChangeText={setPrice}
+              placeholder="Prix"
+              keyboardType="numeric"
+              placeholderTextColor="#aa6c6c"
+            />
+
+            <TouchableOpacity style={styles.addButton} onPress={addProduct}>
+              <Text style={styles.addButtonText}>Ajouter le produit</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.label}>Produits ajoutés:</Text>
+            <FlatList
+              data={products}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <ProductCard data={item} />}
+              scrollEnabled={false}
+            />
+
+            <TouchableOpacity style={styles.submitButton} onPress={methods.handleSubmit(onSubmit)}>
+              <Text style={styles.submitButtonText}>Envoyer</Text>
+            </TouchableOpacity>
           </View>
-        )}
-
-        <TextInput
-          style={styles.input}
-          value={quantity}
-          onChangeText={setQuantity}
-          placeholder="Quantité"
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.input}
-          value={price}
-          onChangeText={setPrice}
-          placeholder="Prix"
-          keyboardType="numeric"
-        />
-
-        <Button title="Ajouter le produit" onPress={addProduct} />
-
-        <Text style={styles.label}>Produits ajoutés:</Text>
-        <FlatList
-          data={products}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ProductCard data={item} />}
-        />
-
-        <Button title="Envoyer" onPress={methods.handleSubmit(onSubmit)} />
-      </View>
+        </ScrollView>
+        </MainLayout>
+      </SafeAreaView>
     </FormProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    paddingBottom: 50,
+  },
   container: {
-    padding: 20
+    padding: 20,
+    backgroundColor: '#fff',
   },
   input: {
     borderWidth: 1,
-    padding: 8,
-    marginVertical: 5,
-    borderRadius: 6
+    borderColor: '#cc4b4b',
+    padding: 10,
+    marginVertical: 6,
+    borderRadius: 10,
+    backgroundColor: '#ffe5e5',
+    color: '#5a1a1a',
   },
   label: {
     fontWeight: 'bold',
-    marginTop: 15
+    fontSize: 16,
+    marginTop: 20,
+    color: '#8b0000',
   },
   suggestions: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffeaea',
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 6,
-    marginBottom: 8
+    borderColor: '#d47a7a',
+    borderRadius: 8,
+    marginBottom: 10,
+    overflow: 'hidden',
   },
   suggestionItem: {
-    padding: 10,
+    padding: 12,
     fontSize: 16,
     borderBottomWidth: 1,
-    borderColor: '#eee'
-  }
+    borderColor: '#f4b3b3',
+    color: '#6b1c1c',
+  },
+  addButton: {
+    backgroundColor: '#d94f4f',
+    padding: 12,
+    borderRadius: 10,
+    marginVertical: 12,
+    alignItems: 'center',
+  },
+  addButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  submitButton: {
+    backgroundColor: '#8b0000',
+    padding: 14,
+    borderRadius: 12,
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  submitButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });

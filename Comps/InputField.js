@@ -15,12 +15,17 @@ export default function InputField({ name, label }) {
           <TextInput
             style={{
               borderWidth: 1,
-              padding: 8,
-              marginBottom: 10,
-              borderRadius: 5,
+              borderColor: '#cc4b4b',
+              padding: 10,
+              marginVertical: 6,
+              borderRadius: 10,
+              backgroundColor: '#ffe5e5',
+              color: '#5a1a1a',
             }}
             onChangeText={onChange}
             value={value}
+            placeholder={name}
+            
           />
         )}
       />
