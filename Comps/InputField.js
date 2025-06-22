@@ -1,5 +1,8 @@
+import { Controller, useFormContext } from "react-hook-form";
+import { Text, TextInput } from "react-native";
+
 export default function InputField({ name, label }) {
-  const { control } = useFormContext(); // use context instead of props
+  const { control } = useFormContext();
 
   return (
     <>
