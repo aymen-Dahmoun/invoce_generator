@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { useForm, FormProvider } from 'react-hook-form';
 import InputField from '../Comps/InputField';
@@ -73,6 +75,11 @@ export default function Home() {
 
   return (
     <FormProvider {...methods}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
+        style={{ flex: 1 }}
+        >
       <SafeAreaView style={{ flex: 1, backgroundColor: '#fff0f0' }}>
         <MainLayout>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -143,6 +150,7 @@ export default function Home() {
         </ScrollView>
         </MainLayout>
       </SafeAreaView>
+      </KeyboardAvoidingView>
     </FormProvider>
   );
 }

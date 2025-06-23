@@ -25,7 +25,7 @@ export default function Storage() {
   const [modalVisible, setModalVisible] = useState(false);
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
-  const [unitPrice, setUnitPrice] = useState(0);
+  const [unitPrice, setUnitPrice] = useState("");
 
 
   useEffect(() => {
@@ -149,6 +149,7 @@ export default function Storage() {
               placeholder="Prix Unitaire"
               placeholderTextColor="#aa6c6c"
               value={unitPrice}
+              keyboardType="numeric"
               onChangeText={setUnitPrice}
             />
 
