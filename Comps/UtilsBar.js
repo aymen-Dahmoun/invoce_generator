@@ -1,48 +1,24 @@
-import { Text, TouchableOpacity, View, StyleSheet, Alert } from "react-native";
-import { deleteData } from "../LocalCache/storageUtils";
+import { Text, TouchableOpacity, View } from "react-native";
 import { Feather } from '@expo/vector-icons';
 
-
 export default function UtilsBar({ onAdd, onChange, onDelete }) {
-
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={onAdd} style={styles.btn}>
-        <Text style={styles.text}>Ajouter</Text>
+    <View className="flex-row justify-around p-3 border-t border-red-300 bg-red-100 bottom-0">
+      <TouchableOpacity
+        onPress={onAdd}
+        className="flex-row items-center px-4 py-2 rounded-xl bg-red-500"
+      >
+        <Text className="text-base font-bold text-white pr-2">Ajouter</Text>
         <Feather name="plus" size={20} color="#fff" />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={onDelete} style={[styles.btn, { backgroundColor: "#ffcccc" }]}>
-        <Text style={[styles.text, { color: "#a30000" }]}>Supprimer tout</Text>
+      <TouchableOpacity
+        onPress={onDelete}
+        className="flex-row items-center px-4 py-2 rounded-xl bg-red-200"
+      >
+        <Text className="text-base font-bold text-red-800 pr-2">Supprimer tout</Text>
         <Feather name="x-circle" size={20} color="#a30000" />
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10,
-    borderTopWidth: 1,
-    borderColor: "#d77a7a",
-    backgroundColor: "#fff0f0",
-    bottom:0
-  },
-  btn: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 10,
-    backgroundColor: "#d94f4f",
-    flexDirection:'row',
-    justifyContent: 'space-around',
-    alignItems: "center",
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#fff",
-    paddingRight:10
-  },
-});

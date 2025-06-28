@@ -6,27 +6,18 @@ export default function InputField({ name, label, type }) {
 
   return (
     <>
-      <Text style={{fontWeight:'bold', fontSize:16, color:"#8b0000"}}>{label}</Text>
+      <Text className="font-bold text-lg text-red-900">{label}</Text>
       <Controller
         control={control}
         name={name}
         defaultValue=""
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={{
-              borderWidth: 1,
-              borderColor: '#cc4b4b',
-              padding: 10,
-              marginVertical: 6,
-              borderRadius: 10,
-              backgroundColor: '#ffe5e5',
-              color: '#5a1a1a',
-            }}
+            className="border border-red-600 p-2 my-1.5 rounded-xl px-3 py-3 bg-red-100 text-red-900"
             onChangeText={onChange}
             value={value}
             placeholder={name}
-            keyboardType= {type}
-            
+            keyboardType={type}
           />
         )}
       />

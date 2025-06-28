@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function MainLayout({children}){
 
     return(
-        <SafeAreaView style={{flex:1, backgroundColor:'#fff'}}>
+        <SafeAreaView className="flex-1 bg-whit">
             {children}
             <NavBar />
         </SafeAreaView>
