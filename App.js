@@ -9,9 +9,6 @@ import { ThemeProvider } from './context/themeContext';
 
 
 export default function App() {
-  configureReanimatedLogger({
-    disableStrictMode: true 
-  });
 
   return (
     <ThemeProvider >

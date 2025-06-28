@@ -15,13 +15,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { getData, setData } from "../LocalCache/storageUtils";
 import MainLayout from "../Comps/MainLayout";
 import { useTheme } from "../context/themeContext";
+import { useColorScheme } from "nativewind";
 
 export default function Settings() {
   const [nom, setNom] = useState("");
   const [business, setBusiness] = useState("");
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(true);
-  const { isDark, toggleTheme } = useTheme();
+  const { colorScheme, toggleColorScheme } = useColorScheme();
 
   const STORAGE_KEY = "isFirstSession";
 
@@ -81,7 +82,7 @@ export default function Settings() {
             <View className="space-y-6">
               {/* Nom */}
               <View className="flex-row items-center gap-3">
-                <Feather name="user" size={20} color={isDark ? "#3B82F6" : "#dc2626"} />
+                <Feather name="user" size={20} color={colorScheme === 'dark' ? "#3B82F6" : "#dc2626"} />
                 <TextInput
                   value={nom}
                   onChangeText={setNom}
@@ -90,10 +91,10 @@ export default function Settings() {
                   className="flex-1 border border-red-500 dark:border-blue-700 bg-red-100 dark:bg-neutral-800 text-red-900 dark:text-white p-3 rounded-xl"
                 />
               </View>
-
+                
               {/* Business */}
-              <View className="flex-row items-center gap-3">
-                <Feather name="briefcase" size={20} color={isDark ? "#3B82F6" : "#dc2626"} />
+              <View className="flex-row items-center gap-3 mt-5">
+                <Feather name="briefcase" size={20} color={colorScheme === 'dark' ? "#3B82F6" : "#dc2626"} />
                 <TextInput
                   value={business}
                   onChangeText={setBusiness}
@@ -104,8 +105,8 @@ export default function Settings() {
               </View>
 
               {/* Address */}
-              <View className="flex-row items-center gap-3">
-                <Feather name="map-pin" size={20} color={isDark ? "#3B82F6" : "#dc2626"} />
+              <View className="flex-row items-center gap-3 mt-5">
+                <Feather name="map-pin" size={20} color={colorScheme === 'dark' ? "#3B82F6" : "#dc2626"} />
                 <TextInput
                   value={address}
                   onChangeText={setAddress}
@@ -117,7 +118,7 @@ export default function Settings() {
 
               {/* Update Button */}
               <TouchableOpacity
-                className="bg-red-600 dark:bg-blue-700 py-4 rounded-xl items-center active:scale-95 transition-all duration-150"
+                className="bg-red-600 mt-8 dark:bg-blue-700 py-4 rounded-xl items-center active:scale-95 transition-all duration-150"
                 onPress={handleUpdate}
               >
                 <Text className="text-white text-lg font-semibold">Mettre à jour</Text>
@@ -125,8 +126,8 @@ export default function Settings() {
 
               {/* Theme Toggle */}
               <TouchableOpacity
-                onPress={toggleTheme}
-                className="bg-red-600 dark:bg-blue-700 py-4 rounded-xl items-center"
+                onPress={toggleColorScheme}
+                className="bg-red-600 mt-8 dark:bg-blue-700 py-4 rounded-xl items-center"
               >
                 <Text className="text-white text-lg font-semibold">
                   Changer de thème
