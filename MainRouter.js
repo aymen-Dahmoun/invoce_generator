@@ -8,6 +8,7 @@ import FirstAppAccessTime from "./screens/FirstAppAccessTime";
 import { getData, setData } from "./LocalCache/storageUtils";
 import Settings from "./screens/Settings";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useColorScheme } from "nativewind";
 
 const STORAGE_KEY = "isFirstSession";
 const Stack = createNativeStackNavigator();
@@ -15,6 +16,7 @@ const Stack = createNativeStackNavigator();
 export default function MainRouter() {
   const [isLoading, setIsLoading] = useState(true);
   const [isFirstSession, setIsFirstSession] = useState(false);
+  const { colorScheme } = useColorScheme();
 
   useEffect(() => {
     
@@ -35,7 +37,7 @@ export default function MainRouter() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 justify-center items-center bg-white">
+      <View className={`flex-1 justify-center items-center ${colorScheme === "dark" ? "bg-neutral-900" : "bg-white"}`}>
         <ActivityIndicator size="large" color="#8b0000" />
       </View>
     );
@@ -46,9 +48,19 @@ export default function MainRouter() {
       <Stack.Navigator
         screenOptions={{
           headerShown: true,
-          headerStyle: { backgroundColor: "#ffe5e5" },
-          headerTintColor: "#8b0000",
-          headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
+          headerStyle: {
+            backgroundColor: colorScheme === "dark" ? "#1e293b" : "#ffe5e5",
+          },
+          headerTintColor: colorScheme === "dark" ? "#bfdbfe" : "#8b0000",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 18,
+            color: colorScheme === "dark" ? "#bfdbfe" : "#8b0000",
+          },
+          contentStyle: {
+            backgroundColor: colorScheme === "dark" ? "#0f172a" : "#fff",
+          },
+          animation: "fade", // or "slide_from_right" for a sliding effect
         }}
         initialRouteName={isFirstSession ? "FirstAccess" : "Home"}
       >
@@ -66,7 +78,6 @@ export default function MainRouter() {
             />
           )}
         </Stack.Screen>
-
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Storage" component={StorageScreen} />
         <Stack.Screen name="Settings" component={Settings} />

@@ -11,12 +11,15 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { setData } from "../LocalCache/storageUtils";
 import { useNavigation } from "@react-navigation/native";
+import { useColorScheme } from "nativewind";
 
 export default function FirstAppAccessTime({ onComplete }) {
   const navigation = useNavigation();
   const [nom, setNom] = useState("");
   const [business, setBusiness] = useState("");
   const [address, setAddress] = useState("");
+  const {colorScheme, tooggleColorScheme} = useColorScheme();
+  
 
   const handleConfirm = async () => {
     if (!nom || !business || !address) {
@@ -48,35 +51,35 @@ export default function FirstAppAccessTime({ onComplete }) {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white dark:bg-neutral-900">
       <KeyboardAvoidingView
         className="flex-1 justify-center px-6"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <TextInput
-          className="border border-red-600 bg-red-100 text-red-900 p-3 rounded-xl my-2"
+          className="border border-red-600 bg-red-100 text-red-900 p-3 rounded-xl my-2 dark:border-blue-600 dark:bg-blue-100 dark:text-blue-900"
           value={nom}
           onChangeText={setNom}
           placeholder="Nom"
-          placeholderTextColor="#aa6c6c"
+          placeholderTextColor={colorScheme === "light" ? "#aa6c6c" : "#2563eb"}
         />
         <TextInput
-          className="border border-red-600 bg-red-100 text-red-900 p-3 rounded-xl my-2"
+          className="border border-red-600 bg-red-100 text-red-900 p-3 rounded-xl my-2 dark:border-blue-600 dark:bg-blue-100 dark:text-blue-900"
           value={business}
           onChangeText={setBusiness}
           placeholder="Nom de business"
-          placeholderTextColor="#aa6c6c"
+          placeholderTextColor={colorScheme === "light" ? "#aa6c6c" : "#2563eb"}
         />
         <TextInput
-          className="border border-red-600 bg-red-100 text-red-900 p-3 rounded-xl my-2"
+          className="border border-red-600 bg-red-100 text-red-900 p-3 rounded-xl my-2 dark:border-blue-600 dark:bg-blue-100 dark:text-blue-900"
           value={address}
           onChangeText={setAddress}
           placeholder="Adresse"
-          placeholderTextColor="#aa6c6c"
+          placeholderTextColor= {colorScheme === "light" ? "#aa6c6c" : "#2563eb"}
         />
 
         <TouchableOpacity
-          className="mt-6 bg-red-600 py-4 rounded-xl items-center"
+          className="mt-6 bg-red-600 py-4 rounded-xl items-center dark:bg-blue-600"
           onPress={handleConfirm}
         >
           <Text className="text-white text-lg font-semibold">Confirmer</Text>

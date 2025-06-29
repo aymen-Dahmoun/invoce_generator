@@ -16,6 +16,7 @@ import ProductCard from '../Comps/ProductCard';
 import { getData } from '../LocalCache/storageUtils';
 import MainLayout from '../Comps/MainLayout';
 import { handlePrintInvoice } from '../utils/htmlInvoice';
+import { useColorScheme } from 'nativewind';
 
 const STORAGE_KEY = 'products';
 
@@ -27,6 +28,7 @@ export default function Home() {
   const [price, setPrice] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [commonProducts, setCommonProducts] = useState([]);
+  const {colorScheme, tooggleColorScheme} = useColorScheme();
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -79,23 +81,23 @@ export default function Home() {
         <SafeAreaView className="flex-1 bg-white">
           <MainLayout>
             <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
-              <View className="p-5 bg-white">
+              <View className="p-5 bg-white dark:bg-neutral-900">
                 <InputField name="client" label="Client:" />
 
-                <Text className="mt-5 text-lg font-bold text-red-900">
+                <Text className="mt-5 text-lg font-bold text-red-900 dark:text-blue-200">
                   Ajouter un produit:
                 </Text>
 
                 <TextInput
-                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900"
+                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900 dark:bg-neutral-800 dark:border-blue-400"
                   value={productInput}
                   onChangeText={handleProductInputChange}
                   placeholder="Nom du produit"
-                  placeholderTextColor="#aa6c6c"
+                  placeholderTextColor={colorScheme === "light" ? "#aa6c6c" : "#60a5fa"}
                 />
 
                 {showSuggestions && filteredSuggestions.length > 0 && (
-                  <View className="bg-red-100 border border-red-300 rounded-lg mb-2 overflow-hidden">
+                  <View className="bg-red-100 border border-red-300 rounded-lg mb-2 overflow-hidden dark:bg-blue-100 dark:border-blue-400">
                     {filteredSuggestions.map((item, index) => (
                       <TouchableOpacity
                         key={index}
@@ -114,24 +116,24 @@ export default function Home() {
                 )}
 
                 <TextInput
-                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900"
+                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900 dark:bg-neutral-800 dark:border-blue-400"
                   value={quantity}
                   onChangeText={setQuantity}
                   placeholder="Quantité"
                   keyboardType="numeric"
-                  placeholderTextColor="#aa6c6c"
+                  placeholderTextColor={colorScheme === "light" ? "#aa6c6c" : "#60a5fa"}
                 />
                 <TextInput
-                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900"
+                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900 dark:bg-neutral-800 dark:border-blue-400"
                   value={price}
                   onChangeText={setPrice}
                   placeholder="Prix unitaire"
                   keyboardType="numeric"
-                  placeholderTextColor="#aa6c6c"
+                  placeholderTextColor={colorScheme === "light" ? "#aa6c6c" : "#60a5fa"}
                 />
 
                 <TouchableOpacity
-                  className="bg-red-500 rounded-xl py-3 my-3 items-center"
+                  className="bg-red-500 rounded-xl py-3 my-3 items-center dark:bg-blue-500"
                   onPress={addProduct}
                 >
                   <Text className="text-white font-bold">
@@ -156,7 +158,7 @@ export default function Home() {
                 />
 
                 <TouchableOpacity
-                  className="bg-red-900 rounded-2xl py-4 mt-8 items-center"
+                  className="bg-red-900 rounded-2xl py-4 mt-8 items-center dark:bg-blue-800"
                   onPress={methods.handleSubmit(onSubmit)}
                 >
                   <Text className="text-white text-base font-semibold">
