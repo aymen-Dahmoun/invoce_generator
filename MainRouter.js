@@ -38,7 +38,7 @@ export default function MainRouter() {
   if (isLoading) {
     return (
       <View className={`flex-1 justify-center items-center ${colorScheme === "dark" ? "bg-neutral-900" : "bg-white"}`}>
-        <ActivityIndicator size="large" color="#8b0000" />
+        <ActivityIndicator size="large" color={colorScheme === "light" ? "#8b0000" : "#60a5fa"} />
       </View>
     );
   }

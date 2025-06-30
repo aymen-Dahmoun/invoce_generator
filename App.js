@@ -10,6 +10,7 @@ import {
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
 import { NavigationContainer } from '@react-navigation/native';
+import { ThemeProvider } from './context/themeContext';
 import { getData } from './LocalCache/storageUtils';
 
 ErrorUtils.setGlobalHandler((error, isFatal) => {
@@ -36,12 +37,12 @@ export default function App() {
   });
 
   return (
-    <NavigationContainer>
-      <SafeAreaProvider>
-        <View style={{ flex: 1 }}>
-          <MainRouter />
-        </View>
-      </SafeAreaProvider>
-    </NavigationContainer>
+    <View className={`flex-1 bg-white dark:bg-neutral-900 ${colorScheme === 'dark' ? 'dark' : ''}`}>
+        <NavigationContainer>
+          <SafeAreaProvider>
+              <MainRouter />
+          </SafeAreaProvider>
+        </NavigationContainer>
+    </View>
   );
 }

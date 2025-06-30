@@ -3,20 +3,12 @@ import { Feather } from "@expo/vector-icons";
 import { useEffect, useRef } from "react";
 import { setData } from "../LocalCache/storageUtils";
 
+
 export default function ThemeToggleButton({ isEnabled, toggleSwitch }) {
   const THEME_KEY = "isDarkModeEnabled";
-  const prevValue = useRef(isEnabled);
 
   useEffect(() => {
     setData(THEME_KEY, isEnabled);
-    if (prevValue.current !== isEnabled) {
-      prevValue.current = isEnabled;
-      if (typeof global !== "undefined" && global?.Expo) {
-        global.Expo.Updates?.reload?.();
-      } else if (typeof window !== "undefined" && window.location) {
-        window.location.reload();
-      }
-    }
   }, [isEnabled]);
 
   return (

@@ -83,7 +83,7 @@ export default function Home() {
       >
         <View className="flex-1 bg-white">
           <MainLayout>
-            <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
+            <ScrollView contentContainerStyle={{ paddingBottom: 150 }}>
               <View className="p-5 bg-white dark:bg-neutral-900">
                 <InvoiceTypeSwitch value={isLivraison} onValueChange={setIsLivraison}/>
                 <InputNumberGenerator name='InvoiceNumber' label={`Bon de ${isLivraison ? 'Livraison' : 'Commande'} N° :`} />
@@ -95,7 +95,7 @@ export default function Home() {
                 </Text>
 
                 <TextInput
-                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900 dark:bg-neutral-800 dark:border-blue-400"
+                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900 dark:text-blue-200 dark:bg-neutral-800 dark:border-blue-400"
                   value={productInput}
                   onChangeText={handleProductInputChange}
                   placeholder="Nom du produit"
@@ -110,7 +110,7 @@ export default function Home() {
                         onPress={() => handleSuggestionSelect(item)}
                         className="border-b border-red-200 p-3"
                       >
-                        <Text className="text-red-800">
+                        <Text className="text-red-800 dark:text-blue-900">
                           {item.name}
                           {item.unitPrice && item.description
                             ? ` (Description: ${item.description}, Prix: ${item.unitPrice})`
@@ -122,7 +122,7 @@ export default function Home() {
                 )}
 
                 <TextInput
-                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900 dark:bg-neutral-800 dark:border-blue-400"
+                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900 dark:text-blue-200 dark:bg-neutral-800 dark:border-blue-400"
                   value={quantity}
                   onChangeText={setQuantity}
                   placeholder="Quantité"
@@ -130,7 +130,7 @@ export default function Home() {
                   placeholderTextColor={colorScheme === "light" ? "#aa6c6c" : "#60a5fa"}
                 />
                 <TextInput
-                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900 dark:bg-neutral-800 dark:border-blue-400"
+                  className="border border-red-400 bg-red-100 rounded-xl px-3 py-3 my-2 text-red-900 dark:text-blue-200 dark:bg-neutral-800 dark:border-blue-400"
                   value={price}
                   onChangeText={setPrice}
                   placeholder="Prix unitaire"
@@ -159,9 +159,17 @@ export default function Home() {
                 <FlatList
                   data={products}
                   keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => <ProductCard data={item} />}
                   scrollEnabled={false}
+                  renderItem={({ item }) => (
+                    <ProductCard
+                      data={item}
+                      onDelete={() =>
+                        setProducts((prev) => prev.filter((p) => p.id !== item.id))
+                      }
+                    />
+                  )}
                 />
+
 
                 <TouchableOpacity
                   className="bg-red-900 rounded-2xl py-4 mt-8 items-center dark:bg-blue-800"

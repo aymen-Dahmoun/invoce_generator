@@ -61,7 +61,7 @@ export default function Settings() {
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center bg-white dark:bg-neutral-900">
-        <ActivityIndicator size="large" color="#8b0000" />
+        <ActivityIndicator size="large" color={ colorScheme === "light" ? "#8b0000" : "#60a5fa"} />
       </View>
     );
   }
