@@ -44,7 +44,6 @@ export default function MainRouter() {
   }
 
   return (
-    <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerShown: true,
@@ -82,6 +81,5 @@ export default function MainRouter() {
         <Stack.Screen name="Storage" component={StorageScreen} />
         <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 }

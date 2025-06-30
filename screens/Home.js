@@ -17,6 +17,8 @@ import { getData } from '../LocalCache/storageUtils';
 import MainLayout from '../Comps/MainLayout';
 import { handlePrintInvoice } from '../utils/htmlInvoice';
 import { useColorScheme } from 'nativewind';
+import InvoiceTypeSwitch from '../Comps/InvoiceTypeSwitch';
+import InputNumberGenerator from '../Comps/InputNumberGenerator';
 
 const STORAGE_KEY = 'products';
 
@@ -29,6 +31,7 @@ export default function Home() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [commonProducts, setCommonProducts] = useState([]);
   const {colorScheme, tooggleColorScheme} = useColorScheme();
+  const [isLivraison, setIsLivraison] = useState(true);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -82,7 +85,10 @@ export default function Home() {
           <MainLayout>
             <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
               <View className="p-5 bg-white dark:bg-neutral-900">
+                <InvoiceTypeSwitch value={isLivraison} onValueChange={setIsLivraison}/>
+                <InputNumberGenerator name='InvoiceNumber' label={`Bon de ${isLivraison ? 'Livraison' : 'Commande'} N° :`} />
                 <InputField name="client" label="Client:" />
+                <InputField name="adresse" label="Adresse:" />
 
                 <Text className="mt-5 text-lg font-bold text-red-900 dark:text-blue-200">
                   Ajouter un produit:
@@ -141,11 +147,11 @@ export default function Home() {
                   </Text>
                 </TouchableOpacity>
 
-                <InputField name="SOLDE ANT" type="numeric" />
-                <InputField name="VRS JOUR" type="numeric" />
+                <InputField name="SOLDE ANT" type="numeric" label="Solde Ancien (anciennes dettes):" />
+                <InputField name="VRS JOUR" type="numeric" label="Versement de Jour (montant payé aujourd'hui):" />
 
                 {products.length > 0 && (
-                  <Text className="mt-5 text-lg font-bold text-red-900">
+                  <Text className="mt-5 text-lg font-bold text-red-900 dark:text-blue-400">
                     Produits ajoutés:
                   </Text>
                 )}
