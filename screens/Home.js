@@ -78,7 +78,7 @@ export default function Home() {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
         className="flex-1"
       >
-        <SafeAreaView className="flex-1 bg-white">
+        <View className="flex-1 bg-white">
           <MainLayout>
             <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
               <View className="p-5 bg-white dark:bg-neutral-900">
@@ -168,7 +168,7 @@ export default function Home() {
               </View>
             </ScrollView>
           </MainLayout>
-        </SafeAreaView>
+        </View>
       </KeyboardAvoidingView>
     </FormProvider>
   );

@@ -11,11 +11,10 @@ import {
   Platform,
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { getData, setData } from "../LocalCache/storageUtils";
 import MainLayout from "../Comps/MainLayout";
-import { useTheme } from "../context/themeContext";
 import { useColorScheme } from "nativewind";
+import ToggleButton from "../Comps/ToggleButton";
 
 export default function Settings() {
   const [nom, setNom] = useState("");
@@ -71,16 +70,15 @@ export default function Settings() {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
-      className="flex-1 bg-red-50 dark:bg-neutral-900"
+      className="flex-1"
     >
       <MainLayout>
-        <SafeAreaView className="flex-1 justify-between px-4">
+        <View className="flex-1 justify-between px-4">
           <ScrollView
             contentContainerStyle={{ paddingBottom: 24 }}
             keyboardShouldPersistTaps="handled"
           >
             <View className="space-y-6">
-              {/* Nom */}
               <View className="flex-row items-center gap-3">
                 <Feather name="user" size={20} color={colorScheme === 'dark' ? "#3B82F6" : "#dc2626"} />
                 <TextInput
@@ -92,7 +90,6 @@ export default function Settings() {
                 />
               </View>
                 
-              {/* Business */}
               <View className="flex-row items-center gap-3 mt-5">
                 <Feather name="briefcase" size={20} color={colorScheme === 'dark' ? "#3B82F6" : "#dc2626"} />
                 <TextInput
@@ -104,7 +101,6 @@ export default function Settings() {
                 />
               </View>
 
-              {/* Address */}
               <View className="flex-row items-center gap-3 mt-5">
                 <Feather name="map-pin" size={20} color={colorScheme === 'dark' ? "#3B82F6" : "#dc2626"} />
                 <TextInput
@@ -116,7 +112,6 @@ export default function Settings() {
                 />
               </View>
 
-              {/* Update Button */}
               <TouchableOpacity
                 className="bg-red-600 mt-8 dark:bg-blue-700 py-4 rounded-xl items-center active:scale-95 transition-all duration-150"
                 onPress={handleUpdate}
@@ -124,18 +119,10 @@ export default function Settings() {
                 <Text className="text-white text-lg font-semibold">Mettre à jour</Text>
               </TouchableOpacity>
 
-              {/* Theme Toggle */}
-              <TouchableOpacity
-                onPress={toggleColorScheme}
-                className="bg-red-600 mt-8 dark:bg-blue-700 py-4 rounded-xl items-center"
-              >
-                <Text className="text-white text-lg font-semibold">
-                  Changer de thème
-                </Text>
-              </TouchableOpacity>
+              <ToggleButton isEnabled={colorScheme === 'dark'} toggleSwitch={toggleColorScheme} />
             </View>
           </ScrollView>
-        </SafeAreaView>
+        </View>
       </MainLayout>
     </KeyboardAvoidingView>
   );

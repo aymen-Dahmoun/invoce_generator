@@ -97,7 +97,8 @@ const renderItem = ({ item, index }) => (
 );
 
 return (
-  <SafeAreaView className="flex-1 bg-white dark:bg-neutral-900">
+  <View className={colorScheme === 'dark' ? 'flex-1' : 'flex-1'}>
+  <View className="flex-1 bg-white dark:bg-neutral-900">
     <MainLayout>
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
         <View className="p-5 flex-grow bg-white dark:bg-neutral-900">
@@ -165,6 +166,7 @@ return (
         </KeyboardAvoidingView>
       </Modal>
     </MainLayout>
-  </SafeAreaView>
+  </View>
+  </View>
   );
 }

@@ -51,7 +51,8 @@ export default function FirstAppAccessTime({ onComplete }) {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white dark:bg-neutral-900">
+    <SafeAreaView className={colorScheme==='dark' ? 'flex-1' : 'flex-1'}>
+    <View className="flex-1 bg-white dark:bg-neutral-900">
       <KeyboardAvoidingView
         className="flex-1 justify-center px-6"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -85,6 +86,7 @@ export default function FirstAppAccessTime({ onComplete }) {
           <Text className="text-white text-lg font-semibold">Confirmer</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
+    </View>
     </SafeAreaView>
   );
 }
