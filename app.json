@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "invoice_generator",
-    "slug": "invoice_generator",
+    "name": "Fatourati",
+    "slug": "fatourati",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
